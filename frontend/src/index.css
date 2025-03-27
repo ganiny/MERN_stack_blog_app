@@ -1,0 +1,53 @@
+@import "../node_modules/bootstrap-icons/font/bootstrap-icons.min.css";
+
+:root {
+  --main-color: #efefef;
+  --primary-color: #1d2d3d;
+  --secondary-color: #495e74;
+  --gray-color: #778697;
+  --dark-color: #292b2c;
+  --blue-color: #0275d8;
+  --green-color: #27ae60;
+  --green-sea-color: #16a085;
+  --pumpkin-color: #d35400;
+  --red-color: #d9534f;
+  --white-color: #fff;
+}
+
+th,
+td {
+  border: 1px solid var(--gray-color);
+  padding: 10px;
+}
+
+th {
+  background-color: var(--primary-color);
+  color: var(--white-color);
+}
+
+tr:nth-child(even) {
+  background-color: #eee;
+}
+
+tr:hover {
+  background-color: #ddd;
+}
+
+@media (max-width: 720px) {
+  th,
+  td {
+    padding: 5px;
+  }
+}
+
+@media (max-width: 520px) {
+  th,
+  td {
+    padding: 0px;
+  }
+}
+
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
