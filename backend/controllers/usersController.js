@@ -7,7 +7,7 @@ const path = require("path");
 const {
   cloudinaryRemoveImage,
   cloudinaryUploadImage,
-  cloudinaryRemoveImages
+  cloudinaryRemoveImages,
 } = require("../utils/cloudinary");
 const fs = require("fs");
 
@@ -47,7 +47,7 @@ module.exports.getUserCtrl = asyncHandler(async (req, res) => {
 module.exports.updateUserCtrl = asyncHandler(async (req, res) => {
   const { error } = validateUpdateUser(req.body);
   if (error) {
-    return res.status(400).json({message: error.details[0].message});
+    return res.status(400).json({ message: error.details[0].message });
   }
 
   if (req.body.password) {
@@ -65,7 +65,9 @@ module.exports.updateUserCtrl = asyncHandler(async (req, res) => {
       },
     },
     { new: true }
-  ).select("-password");
+  )
+    .select("-password")
+    .populate("posts");
 
   res.status(200).json(updatedUser);
 });
@@ -138,10 +140,10 @@ module.exports.deleteUserCtrl = asyncHandler(async (req, res) => {
     return res.status(404).json({ message: "User not found!" });
   }
   // 2. Get all posts from DB
-  const posts = await Post.find({user: user._id});
+  const posts = await Post.find({ user: user._id });
 
   // 3. Get the public ids from the posts
-  const publicIds = posts?.map(post => post.image.publicId);
+  const publicIds = posts?.map((post) => post.image.publicId);
 
   // 4. Delete all posts images from cloudinary that belong to this user
   if (publicIds?.length > 0) {
@@ -149,11 +151,13 @@ module.exports.deleteUserCtrl = asyncHandler(async (req, res) => {
   }
 
   // 5. Delete the profile photo from cloudinary
-  await cloudinaryRemoveImage(user.profilePhoto.publicId);
+  if (user.profilePhoto.publicId !== null) {
+    await cloudinaryRemoveImage(user.profilePhoto.publicId);
+  }
 
   // 6. Delete user's posts and comments
-  await Post.deleteMany({user: user._id});
-  await Comment.deleteMany({user: user._id});
+  await Post.deleteMany({ user: user._id });
+  await Comment.deleteMany({ user: user._id });
 
   // 7. Delete the user himself
   await User.findByIdAndDelete(req.params.id);

@@ -1,9 +1,19 @@
 import { Link } from "react-router-dom";
 import AdminSidebar from "./AdminSidebar";
 import swal from "sweetalert";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteProfile, getAllUsersProfiles } from "../redux/apiCalls/profileApiCalls";
+import { useEffect } from "react";
 
 function UsersTable() {
-  const deleteUserHandler = () => {
+  const dispatch = useDispatch();
+  const { profiles, isProfileDeleted } = useSelector((state) => state.profile);
+
+  useEffect(()=>{
+      dispatch(getAllUsersProfiles());
+    },[isProfileDeleted]);
+
+  const deleteUserHandler = (userId) => {
     swal({
       title: "Are you sure?",
       text: "Once deleted, you will not be able to recover this user!",
@@ -12,9 +22,7 @@ function UsersTable() {
       dangerMode: true,
     }).then((willDelete) => {
       if (willDelete) {
-        swal("User has been deleted!", {
-          icon: "success",
-        });
+        dispatch(deleteProfile(userId))
       } else {
         swal("User is safe!");
       }
@@ -37,31 +45,31 @@ function UsersTable() {
             </tr>
           </thead>
           <tbody>
-            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item) => (
-              <tr key={item}>
-                <td>{item}</td>
+            {profiles?.map((profile, index) => (
+              <tr key={profile?._id}>
+                <td>{index + 1}</td>
                 <td>
                   <div className="flex flex-col md:flex-row items-center justify-start">
                     <img
                       className="w-10 h-10 rounded-full object-cover"
-                      src="/images/user-avatar.png"
-                      alt=""
+                      src={profile?.profilePhoto?.url}
+                      alt="profile photo"
                     />
                     <span className="font-medium text-center text-[17px] ml-[5px]">
-                      Mohamed Abubakr
+                      {profile?.username}
                     </span>
                   </div>
                 </td>
-                <td className="">gen2022eg@gmail.com</td>
+                <td>{profile?.email}</td>
                 <td>
                   <div className="flex flex-wrap md:flex-nowrap items-center justify-around">
                     <button className="w-full md:w-fit my-[10px] md:my-0 mx-0 border-none bg-green hover:bg-[green] text-white rounded-[5px] text-[17px] font-medium p-[5px]">
-                      <Link className="text-white" to={"/profile/1"}>
+                      <Link className="text-white" to={`/profile/${profile?._id}`}>
                         View Profile
                       </Link>
                     </button>
                     <button
-                      onClick={deleteUserHandler}
+                      onClick={()=>deleteUserHandler(profile?._id)}
                       className="w-full md:w-fit my-[10px] md:my-0 mx-0 border-none bg-red hover:bg-[red] text-white rounded-[5px] text-[17px] font-medium p-[5px]"
                     >
                       Delete User

@@ -22,6 +22,7 @@ import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import { useSelector } from "react-redux";
+import VerifyEmailPage from "./pages/VerifyEmailPage";
 
 function App() {
   const user = useSelector((state) => state.auth.user?.userWithoutPassword);
@@ -78,8 +79,12 @@ function App() {
             path="/register"
             element={!user ? <RegisterPage /> : <Navigate to={"/"} />}
           />
+          <Route
+            path="/users/:userId/verify/:token"
+            element={!user ? <VerifyEmailPage /> : <Navigate to={"/"} />}
+          />
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-          <Route path="/reset-password" element={<ResetPasswordPage />} />
+          <Route path="/reset-password/:userId/:token" element={<ResetPasswordPage />} />
 
           <Route path="/profile/:id" element={<ProfilePage />} />
           <Route path="*" element={<NotFoundPage />} />

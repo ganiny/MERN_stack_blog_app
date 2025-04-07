@@ -15,7 +15,7 @@ module.exports.cloudinaryUploadImage = async(fileToUpload) => {
         return data;
     } catch (error) {
         console.log(error);
-        throw new Error("Internal Server Error(cloudinary)");
+        throw new Error("Internal Server Error(cloudinary), please try again in a moment");
     }
 };
 
@@ -26,7 +26,7 @@ module.exports.cloudinaryRemoveImage = async(imagePublicId) => {
         return result;
     } catch (error) {
         console.log(error);
-        throw new Error("Internal Server Error(cloudinary)");
+        throw new Error("Internal Server Error(cloudinary), please try again in a moment");
     }
 };
 
@@ -37,6 +37,6 @@ module.exports.cloudinaryRemoveImages = async(publicIdsArray) => {
         return result;
     } catch (error) {
         console.log(error);
-        throw new Error("Internal Server Error(cloudinary)");
+        throw new Error("Internal Server Error(cloudinary), please try again in a moment");
     }
 };

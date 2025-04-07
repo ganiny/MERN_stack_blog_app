@@ -1,8 +1,19 @@
 import AdminSidebar from "./AdminSidebar";
 import swal from "sweetalert";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import {
+  deleteCategory,
+  fetchCategories,
+} from "../redux/apiCalls/categoriesApiCalls";
 
 function CategoriesTable() {
-  const deleteCategoryHandler = () => {
+  const dispatch = useDispatch();
+  const { categories } = useSelector((state) => state.categories);
+  useEffect(() => {
+    dispatch(fetchCategories());
+  }, []);
+  const deleteCategoryHandler = (categoryId) => {
     swal({
       title: "Are you sure?",
       text: "Once deleted, you will not be able to recover this category!",
@@ -11,9 +22,7 @@ function CategoriesTable() {
       dangerMode: true,
     }).then((willDelete) => {
       if (willDelete) {
-        swal("Category has been deleted!", {
-          icon: "success",
-        });
+        dispatch(deleteCategory(categoryId));
       } else {
         swal("Category is safe!");
       }
@@ -24,7 +33,7 @@ function CategoriesTable() {
       <AdminSidebar />
       <div className="flex-[10] p-[2px] sm:p-[15px] md:p-5 overflow-y-scroll">
         <h1 className="text-3xl text-secondary mb-[15px] border-b-2 border-secondary pb-[3px] w-max">
-        Categories
+          Categories
         </h1>
         <table className="w-full text-left border-collapse">
           <thead>
@@ -35,16 +44,16 @@ function CategoriesTable() {
             </tr>
           </thead>
           <tbody>
-            {[1,2,3].map((item) => (
-              <tr key={item}>
-                <td>{item}</td>
+            {categories?.map((category, index) => (
+              <tr key={category?._id}>
+                <td>{index + 1}</td>
                 <td>
-                  <b>music</b>
+                  <b className="capitalize">{category?.title}</b>
                 </td>
                 <td>
                   <div className="flex flex-wrap md:flex-nowrap items-center justify-around">
                     <button
-                      onClick={deleteCategoryHandler}
+                      onClick={() => deleteCategoryHandler(category?._id)}
                       className="w-full md:w-fit my-[10px] md:my-0 mx-0 border-none bg-red hover:bg-[red] text-white rounded-[5px] text-[17px] font-medium p-[5px]"
                     >
                       Delete Category

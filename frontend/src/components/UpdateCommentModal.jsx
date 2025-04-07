@@ -1,24 +1,29 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { updateComment } from "../redux/apiCalls/commentsApiCalls";
 
 /* eslint-disable react/prop-types */
-function UpdateCommentModal({ setUpdateComment }) {
+function UpdateCommentModal({ setUpdateComment, commentForUpdate }) {
+  const [text, setText] = useState(commentForUpdate?.text);
 
-  const [text, setText] = useState("This is amazing post!");
-  
+  const dispatch = useDispatch();
 
   const formSubmitHandler = (e) => {
     e.preventDefault();
 
     if (text.trim() === "") return toast.error("Comment Text is required");
-    
 
-    console.log({ text });
+    dispatch(updateComment(commentForUpdate?._id, {text}));
+    setUpdateComment(false);
   };
 
   return (
     <div className="fixed top-0 left-0 w-full h-full bg-[#000000b3] z-[999] flex items-center justify-center">
-      <form onSubmit={formSubmitHandler} className="w-[90%] lg:w-[700px] bg-white p-[15px] flex flex-col relative rounded-[10px]">
+      <form
+        onSubmit={formSubmitHandler}
+        className="w-[90%] lg:w-[700px] bg-white p-[15px] flex flex-col relative rounded-[10px]"
+      >
         <abbr title="close">
           <i
             onClick={() => setUpdateComment(false)}

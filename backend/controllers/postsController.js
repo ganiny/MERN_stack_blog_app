@@ -176,7 +176,7 @@ module.exports.updatePostCtrl = asyncHandler(async (req, res) => {
       },
     },
     { new: true }
-  ).populate("user", ["-password"]);
+  ).populate("user", ["-password"]).populate("comments");
 
   // Send response to the client
   res.status(200).json(updatedPost);

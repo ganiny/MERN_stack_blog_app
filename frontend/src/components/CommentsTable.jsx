@@ -1,8 +1,18 @@
 import AdminSidebar from "./AdminSidebar";
 import swal from "sweetalert";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteComment, fetchAllComments } from "../redux/apiCalls/commentsApiCalls";
+import { useEffect } from "react";
 
 function CommentsTable() {
-  const deleteCommentHandler = () => {
+  const dispatch = useDispatch();
+  const { comments } = useSelector((state) => state.comments);
+
+  useEffect(()=>{
+      dispatch(fetchAllComments());
+    },[]);
+
+  const deleteCommentHandler = (commentId) => {
     swal({
       title: "Are you sure?",
       text: "Once deleted, you will not be able to recover this comment!",
@@ -11,9 +21,7 @@ function CommentsTable() {
       dangerMode: true,
     }).then((willDelete) => {
       if (willDelete) {
-        swal("Comment has been deleted!", {
-          icon: "success",
-        });
+        dispatch(deleteComment(commentId));
       } else {
         swal("Comment is safe!");
       }
@@ -24,7 +32,7 @@ function CommentsTable() {
       <AdminSidebar />
       <div className="flex-[10] p-[2px] sm:p-[15px] md:p-5 overflow-y-scroll">
         <h1 className="text-3xl text-secondary mb-[15px] border-b-2 border-secondary pb-[3px] w-max">
-        Comments
+          Comments
         </h1>
         <table className="w-full text-left border-collapse">
           <thead>
@@ -36,26 +44,26 @@ function CommentsTable() {
             </tr>
           </thead>
           <tbody>
-            {[1,2,3].map((item) => (
-              <tr key={item}>
-                <td>{item}</td>
+            {comments?.map((comment, index) => (
+              <tr key={comment?._id}>
+                <td>{index + 1}</td>
                 <td>
                   <div className="flex flex-col md:flex-row items-center justify-start">
                     <img
                       className="w-10 h-10 rounded-full object-cover"
-                      src="/images/user-avatar.png"
-                      alt=""
+                      src={comment?.user?.profilePhoto?.url}
+                      alt="profile photo"
                     />
                     <span className="font-medium text-center text-[17px] ml-[5px]">
-                      Mohamed Abubakr
+                      {comment?.user?.username}
                     </span>
                   </div>
                 </td>
-                <td className="">Thanks for this post</td>
+                <td>{comment?.text}</td>
                 <td>
                   <div className="flex flex-wrap md:flex-nowrap items-center justify-around">
                     <button
-                      onClick={deleteCommentHandler}
+                      onClick={()=>deleteCommentHandler(comment?._id)}
                       className="w-full md:w-fit my-[10px] md:my-0 mx-0 border-none bg-red hover:bg-[red] text-white rounded-[5px] text-[17px] font-medium p-[5px]"
                     >
                       Delete Comment

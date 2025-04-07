@@ -1,11 +1,18 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
+import { updatePost } from "../redux/apiCalls/postsApiCalls";
+import { fetchCategories } from "../redux/apiCalls/categoriesApiCalls";
 
 /* eslint-disable react/prop-types */
 function UpdatePostModal({ setUpdatePost, post }) {
-  const [title, setTitle] = useState(post.title);
-  const [description, setDescription] = useState(post.description);
-  const [category, setCategory] = useState(post.category);
+  const [title, setTitle] = useState(post?.title);
+  const [description, setDescription] = useState(post?.description);
+  const [category, setCategory] = useState(post?.category);
+
+  const { categories } = useSelector((state) => state.categories);
+
+  const dispatch = useDispatch();
 
   const formSubmitHandler = (e) => {
     e.preventDefault();
@@ -15,11 +22,20 @@ function UpdatePostModal({ setUpdatePost, post }) {
     if (description.trim() === "")
       return toast.error("Post Description is required");
 
-    console.log({ title, category, description });
+    dispatch(updatePost({ title, category, description }, post?._id));
+    setUpdatePost(false);
   };
+
+  useEffect(() => {
+        dispatch(fetchCategories());
+      }, []);
+  
   return (
     <div className="fixed top-0 left-0 w-full h-full bg-[#000000b3] z-[999] flex items-center justify-center">
-      <form onSubmit={formSubmitHandler} className="w-[90%] lg:w-[700px] bg-white p-[15px] flex flex-col relative rounded-[10px]">
+      <form
+        onSubmit={formSubmitHandler}
+        className="w-[90%] lg:w-[700px] bg-white p-[15px] flex flex-col relative rounded-[10px]"
+      >
         <abbr title="close">
           <i
             onClick={() => setUpdatePost(false)}
@@ -48,8 +64,11 @@ function UpdatePostModal({ setUpdatePost, post }) {
           <option disabled value="">
             Select A Category
           </option>
-          <option value="music">music</option>
-          <option value="coffee">coffee</option>
+          {categories?.map((category) => (
+            <option key={category?._id} value={category?.title}>
+              {category?.title}
+            </option>
+          ))}
         </select>
         <textarea
           value={description}

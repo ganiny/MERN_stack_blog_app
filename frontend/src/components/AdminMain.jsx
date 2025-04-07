@@ -1,14 +1,33 @@
 import { Link } from "react-router-dom";
 import AddCategoryForm from "./AddCategoryForm";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { fetchCategories } from "../redux/apiCalls/categoriesApiCalls";
+import { getUsersCount } from "../redux/apiCalls/profileApiCalls";
+import { getPostsCount } from "../redux/apiCalls/postsApiCalls";
+import { fetchAllComments } from "../redux/apiCalls/commentsApiCalls";
 
 function AdminMain() {
+  const dispatch = useDispatch();
+  const { categories } = useSelector((state) => state.categories);
+  const { usersCount } = useSelector((state) => state.profile);
+  const { postsCount } = useSelector((state) => state.posts);
+  const { comments } = useSelector((state) => state.comments);
+
+  useEffect(()=>{
+    dispatch(fetchCategories());
+    dispatch(getUsersCount());
+    dispatch(getPostsCount());
+    dispatch(fetchAllComments());
+  },[]);
+
   return (
     <div className="flex-[10] p-[10px]">
       <div className="flex items-center justify-between flex-wrap mb-[30px] pb-[15px] border-b-2 border-gray">
         <div className="border-2 border-gray w-full md:w-[44%] lg:w-[26%] xl:w-[22%] m-[5px] mb-[10px] p-[10px] rounded-[10px]">
           <h5 className="text-[21px] font-medium text-gray">Users</h5>
           <div className="text-red text-2xl font-semibold my-[5px] mx-0">
-            120
+            {usersCount}
           </div>
           <div className="flex items-center justify-between">
             <Link
@@ -25,7 +44,7 @@ function AdminMain() {
         <div className="border-2 border-gray w-full md:w-[44%] lg:w-[26%] xl:w-[22%] m-[5px] mb-[10px] p-[10px] rounded-[10px]">
           <h5 className="text-[21px] font-medium text-gray">Posts</h5>
           <div className="text-red text-2xl font-semibold my-[5px] mx-0">
-            210
+            {postsCount}
           </div>
           <div className="flex items-center justify-between">
             <Link
@@ -42,7 +61,7 @@ function AdminMain() {
         <div className="border-2 border-gray w-full md:w-[44%] lg:w-[26%] xl:w-[22%] m-[5px] mb-[10px] p-[10px] rounded-[10px]">
           <h5 className="text-[21px] font-medium text-gray">Categories</h5>
           <div className="text-red text-2xl font-semibold my-[5px] mx-0">
-            10
+            {categories?.length}
           </div>
           <div className="flex items-center justify-between">
             <Link
@@ -59,7 +78,7 @@ function AdminMain() {
         <div className="border-2 border-gray w-full md:w-[44%] lg:w-[26%] xl:w-[22%] m-[5px] mb-[10px] p-[10px] rounded-[10px]">
           <h5 className="text-[21px] font-medium text-gray">Comments</h5>
           <div className="text-red text-2xl font-semibold my-[5px] mx-0">
-            44
+            {comments?.length}
           </div>
           <div className="flex items-center justify-between">
             <Link

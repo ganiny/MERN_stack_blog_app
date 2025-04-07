@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { registerUser } from "../redux/apiCalls/authApiCalls";
+import swal from "sweetalert";
 
 function RegisterPage() {
   const [username, setUsername] = useState("");
@@ -11,6 +12,8 @@ function RegisterPage() {
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const dispatch = useDispatch();
+  const {registerMessage} = useSelector(state => state.auth);
+  const navigate = useNavigate();
 
   const formSubmitHandler = (e) => {
     e.preventDefault();
@@ -26,6 +29,16 @@ function RegisterPage() {
       toast.error("Password didn't match, confirm it again!");
     }
   };
+  if(registerMessage){
+    swal({
+      title: registerMessage,
+      icon: "success",
+    }).then(isOk => {
+      if(isOk){
+        navigate("/login");
+      }
+    });
+  }
   return (
     <section className="w-full h-[calc(100vh-130px)] flex items-center justify-center flex-col p-[15px]">
       <h1 className="text-3xl text-primary mb-[15px]">Create new account</h1>

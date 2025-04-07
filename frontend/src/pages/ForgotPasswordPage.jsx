@@ -1,7 +1,10 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { forgotPassword } from "../redux/apiCalls/passwordApiCalls";
 
 function ForgotPasswordPage() {
+  const dispatch = useDispatch();
   const [email, setEmail] = useState("");
 
   const formSubmitHandler = (e) => {
@@ -9,7 +12,7 @@ function ForgotPasswordPage() {
 
     if (email.trim() === "") return toast.error("Email is required");
 
-    console.log({ email });
+    dispatch(forgotPassword(email));
   };
   return (
     <section className="w-full h-[calc(100vh-130px)] flex items-center justify-center flex-col p-[15px]">

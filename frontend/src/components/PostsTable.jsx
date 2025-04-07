@@ -1,10 +1,17 @@
 import { Link } from "react-router-dom";
 import AdminSidebar from "./AdminSidebar";
 import swal from "sweetalert";
-import { posts } from "../dummyData";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { deletePost, fetchAllPosts } from "../redux/apiCalls/postsApiCalls";
 
 function PostsTable() {
-  const deletePostHandler = () => {
+  const dispatch = useDispatch();
+  const { posts } = useSelector((state) => state.posts);
+  useEffect(() => {
+    dispatch(fetchAllPosts());
+  }, []);
+  const deletePostHandler = (postId) => {
     swal({
       title: "Are you sure?",
       text: "Once deleted, you will not be able to recover this post!",
@@ -13,9 +20,7 @@ function PostsTable() {
       dangerMode: true,
     }).then((willDelete) => {
       if (willDelete) {
-        swal("Post has been deleted!", {
-          icon: "success",
-        });
+        dispatch(deletePost(postId));
       } else {
         swal("Post is safe!");
       }
@@ -38,31 +43,34 @@ function PostsTable() {
             </tr>
           </thead>
           <tbody>
-            {posts.map((item, index) => (
-              <tr key={item._id}>
+            {posts?.map((post, index) => (
+              <tr key={post?._id}>
                 <td>{index + 1}</td>
                 <td>
                   <div className="flex flex-col md:flex-row items-center justify-start">
                     <img
                       className="w-10 h-10 rounded-full object-cover"
-                      src="/images/user-avatar.png"
-                      alt=""
+                      src={post?.user?.profilePhoto?.url}
+                      alt="profile photo"
                     />
                     <span className="font-medium text-center text-[17px] ml-[5px]">
-                      {item.user.username}
+                      {post?.user?.username}
                     </span>
                   </div>
                 </td>
-                <td className="">{item.title}</td>
+                <td className="">{post?.title}</td>
                 <td>
                   <div className="flex flex-wrap md:flex-nowrap items-center justify-around">
                     <button className="w-full md:w-fit my-[10px] md:my-0 mx-0 border-none bg-green hover:bg-[green] text-white rounded-[5px] text-[17px] font-medium p-[5px]">
-                      <Link className="text-white" to={`/posts/details/${item._id}`}>
+                      <Link
+                        className="text-white"
+                        to={`/posts/details/${post?._id}`}
+                      >
                         View Post
                       </Link>
                     </button>
                     <button
-                      onClick={deletePostHandler}
+                      onClick={() => deletePostHandler(post?._id)}
                       className="w-full md:w-fit my-[10px] md:my-0 mx-0 border-none bg-red hover:bg-[red] text-white rounded-[5px] text-[17px] font-medium p-[5px]"
                     >
                       Delete Post

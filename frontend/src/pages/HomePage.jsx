@@ -2,7 +2,6 @@
 import { Link } from "react-router-dom";
 import PostList from "../components/PostList";
 import Sidebar from "../components/Sidebar";
-import { categories } from "../dummyData";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchPosts } from "../redux/apiCalls/postsApiCalls";
@@ -14,9 +13,9 @@ function HomePage() {
     window.scrollTo(0, 0);
   }, []);
 
-  const posts = useSelector(state => state.posts?.posts);
+  const posts = useSelector((state) => state.posts?.posts);
   return (
-    <section>
+    <section className="min-h-[calc(100vh-130px)]">
       {/* Hero Section */}
       <div className="bg-[url(/src/images/home-bg.jpg)] bg-cover bg-no-repeat h-[250px] w-full relative mb-10">
         <div className="flex items-center justify-center absolute z-[2] top-0 right-0 w-full h-full bg-[#00000033]">
@@ -31,7 +30,7 @@ function HomePage() {
       </div>
       <div className="py-0 sm:px-[15px] lg:px-[30px] flex flex-col lg:flex-row items-center lg:items-start">
         <PostList posts={posts} />
-        <Sidebar categories={categories} />
+        <Sidebar />
       </div>
       <div className="py-0 px-[30px] my-[15px] mx-0">
         <Link

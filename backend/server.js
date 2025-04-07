@@ -1,8 +1,12 @@
 const express = require("express");
 require("dotenv").config();
 const connectToDb = require("./config/connectToDb");
-const {errorHandler, notFound} = require("./middlewares/error");
+const { errorHandler, notFound } = require("./middlewares/error");
 const cors = require("cors");
+const xss = require("xss-clean");
+const rateLimiting = require("express-rate-limit");
+const helmet = require("helmet");
+const hpp = require("hpp");
 
 // Connect to MongoDB
 connectToDb();
@@ -12,12 +16,31 @@ const app = express();
 
 // Middlewares
 app.use(express.json());
-app.use(express.urlencoded({extended: false}));
+app.use(express.urlencoded({ extended: false }));
+
+// Security Headers(helmet)
+app.use(helmet());
+
+// Prevent HTTP Param Pollution
+app.use(hpp());
+
+// Prevent XSS Attacks
+app.use(xss());
+
+// Rate Limiting
+app.use(
+  rateLimiting({
+    windowMs: 10 * 60 * 1000, // 10 minutes
+    max: 200,
+  })
+);
 
 // Cors Policy
-app.use(cors({
-  origin: "http://localhost:5173"
-}));
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+  })
+);
 
 // Routes
 app.use("/api/auth", require("./routes/authRoute"));
@@ -25,6 +48,7 @@ app.use("/api/users", require("./routes/usersRoute"));
 app.use("/api/posts", require("./routes/postsRoute"));
 app.use("/api/comments", require("./routes/commentsRoute"));
 app.use("/api/categories", require("./routes/categoriesRoute"));
+app.use("/api/password", require("./routes/passwordRoute"));
 
 // Not Found Middleware
 app.use(notFound);

@@ -1,14 +1,22 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
+import { createPost } from "../redux/apiCalls/postsApiCalls";
+import { useNavigate } from "react-router-dom";
+import { FadeLoader } from "react-spinners";
+import { fetchCategories } from "../redux/apiCalls/categoriesApiCalls";
 
 function CreatePostPage() {
+  const { loading, isPostCreated } = useSelector((state) => state.posts);
+  const { categories } = useSelector((state) => state.categories);
+
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
   const [file, setFile] = useState(null);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const formSubmitHandler = (e) => {
     e.preventDefault();
@@ -25,10 +33,18 @@ function CreatePostPage() {
     formData.append("category", category);
     formData.append("description", description);
 
-    //TODO - Send form data to server
-
-    console.log({ title, category, description, file });
+    dispatch(createPost(formData));
   };
+
+  useEffect(() => {
+    if (isPostCreated) {
+      navigate("/");
+    }
+  }, [isPostCreated, navigate]);
+
+  useEffect(() => {
+      dispatch(fetchCategories());
+    }, []);
 
   return (
     <section className="w-full h-[calc(100vh-130px)] flex flex-col items-center justify-center p-5">
@@ -56,8 +72,11 @@ function CreatePostPage() {
           <option disabled value="">
             Select A Category
           </option>
-          <option value="music">music</option>
-          <option value="coffee">coffee</option>
+          {categories?.map((category) => (
+            <option key={category?._id} value={category?.title}>
+              {category?.title}
+            </option>
+          ))}
         </select>
         <textarea
           value={description}
@@ -78,10 +97,20 @@ function CreatePostPage() {
           id="file"
         />
         <button
-          className="w-full text-center bg-primary text-white border-none text-[21px] font-medium rounded-[10px] p-[10px] mt-[15px]"
+          className="w-full text-center bg-primary text-white border-none text-[21px] font-medium rounded-[10px] p-[10px] mt-[15px] flex items-center justify-center"
           type="submit"
         >
-          Create
+          {loading ? (
+            <FadeLoader
+              color="#ffffff"
+              height={15}
+              margin={-2}
+              radius={6}
+              speedMultiplier={2}
+            />
+          ) : (
+            "Create"
+          )}
         </button>
       </form>
     </section>

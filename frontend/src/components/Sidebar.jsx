@@ -1,7 +1,17 @@
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { fetchCategories } from "../redux/apiCalls/categoriesApiCalls";
 
 /* eslint-disable react/prop-types */
-function Sidebar({ categories }) {
+function Sidebar() {
+  const dispatch = useDispatch();
+  const { categories } = useSelector((state) => state.categories);
+
+  useEffect(() => {
+    dispatch(fetchCategories());
+  }, []);
+
   return (
     <div className="w-full ml-0 lg:flex-[3] lg:ml-5 ">
       <h5 className="text-primary text-center p-[5px] text-2xl border-t border-primary border-b">
