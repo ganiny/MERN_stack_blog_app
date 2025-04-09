@@ -37,7 +37,7 @@ function Header() {
 
       {/* Header Navbar */}
       <nav
-        className={`lg:[clip-path:polygon(0_0,100%_0,100%_100%,0_100%)] max-lg:absolute max-lg:left-0 max-lg:top-full max-lg:w-full max-lg:bg-blue max-lg:transition-all ${
+        className={`lg:[clip-path:polygon(0_0,100%_0,100%_100%,0_100%)] max-lg:absolute max-lg:left-0 max-lg:top-full max-lg:w-full max-lg:bg-blue max-lg:transition-all max-lg:ease-in max-lg:duration-300 ${
           toggle
             ? "[clip-path:polygon(0_0,100%_0,100%_100%,0_100%)]"
             : "[clip-path:polygon(0_0,100%_0,100%_0,0_0)]"
