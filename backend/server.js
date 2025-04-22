@@ -42,6 +42,10 @@ app.use(
   })
 );
 
+app.get("/", (req, res)=>{
+  res.send("Bla Bla Bla");
+});
+
 // Routes
 app.use("/api/auth", require("./routes/authRoute"));
 app.use("/api/users", require("./routes/usersRoute"));
@@ -57,8 +61,8 @@ app.use(notFound);
 app.use(errorHandler);
 
 // Running the server
-// app.listen(process.env.PORT, () => {
-//   console.log(
-//     `Server is running in ${process.env.NODE_ENV} mode on port ${process.env.PORT}`
-//   );
-// });
+app.listen(process.env.PORT, () => {
+  console.log(
+    `Server is running in ${process.env.NODE_ENV} mode on port ${process.env.PORT}`
+  );
+});
