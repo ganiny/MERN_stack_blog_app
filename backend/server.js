@@ -42,10 +42,6 @@ app.use(
   })
 );
 
-app.get("/", (req, res)=>{
-  res.send("Bla Bla Bla");
-});
-
 // Routes
 app.use("/api/auth", require("./routes/authRoute"));
 app.use("/api/users", require("./routes/usersRoute"));
