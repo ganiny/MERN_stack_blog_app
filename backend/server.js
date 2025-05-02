@@ -38,7 +38,7 @@ app.use(
 // Cors Policy
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: "https://mern-stack-blog-app-iota.vercel.app",
   })
 );
 
@@ -57,8 +57,8 @@ app.use(notFound);
 app.use(errorHandler);
 
 // Running the server
-app.listen(process.env.PORT, () => {
-  console.log(
-    `Server is running in ${process.env.NODE_ENV} mode on port ${process.env.PORT}`
-  );
-});
+// app.listen(process.env.PORT, () => {
+//   console.log(
+//     `Server is running in ${process.env.NODE_ENV} mode on port ${process.env.PORT}`
+//   );
+// });
