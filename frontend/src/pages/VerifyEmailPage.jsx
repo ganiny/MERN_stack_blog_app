@@ -1,4 +1,4 @@
-/* eslint-disable react-hooks/exhaustive-deps */
+
 import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
@@ -10,12 +10,11 @@ function VerifyEmailPage() {
   const { userId, token } = useParams();
   useEffect(() => {
     dispatch(verifyEmail(userId, token));
-  }, [userId, token]);
-
+  }, [dispatch, userId, token]);
 
   return (
     <section className="h-[calc(100vh-130px)] w-full flex flex-col justify-center items-center">
-      {isEmailVerified ? (
+      {isEmailVerified && 
         <>
           <i className="bi bi-patch-check text-[80px] text-green"></i>
           <h1 className="text-[32px] m-5 text-green">
@@ -28,11 +27,7 @@ function VerifyEmailPage() {
             Go To Login Page
           </Link>
         </>
-      ) : (
-        <>
-          <h1 className="text-[40px] text-red">Not Found</h1>
-        </>
-      )}
+      }
     </section>
   );
 }
