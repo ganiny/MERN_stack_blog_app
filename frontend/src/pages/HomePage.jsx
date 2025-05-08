@@ -17,7 +17,7 @@ function HomePage() {
   return (
     <section className="min-h-[calc(100vh-130px)]">
       {/* Hero Section */}
-      <div className="bg-[url(/src/images/home-bg.jpg)] bg-cover bg-no-repeat h-[250px] w-full relative mb-10">
+      <div className="bg-[url(/src/images/retrosupply-jLwVAUtLOAQ-unsplash.jpg)] bg-cover bg-top bg-no-repeat h-[400px] w-full relative mb-10">
         <div className="flex items-center justify-center absolute z-[2] top-0 right-0 w-full h-full bg-[#00000033]">
           <h1 className="text-[30px] lg:text-[40px] bg-main py-[10px] px-[17px] text-center rounded-[21px] text-dark border-2 border-green font-bold">
             Welcome To Blog

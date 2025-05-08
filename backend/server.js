@@ -38,7 +38,7 @@ app.use(
 // Cors Policy
 app.use(
   cors({
-    origin: "https://mern-stack-blog-app-iota.vercel.app",
+    origin: "http://localhost:5173",
   })
 );
 
