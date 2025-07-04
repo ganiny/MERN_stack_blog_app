@@ -1,7 +1,7 @@
 const express = require("express");
 require("dotenv").config();
 const connectToDb = require("./config/connectToDb");
-const { errorHandler, notFound } = require("./middlewares/error");
+const { errorHandler } = require("./middlewares/error");
 const cors = require("cors");
 const xss = require("xss-clean");
 const rateLimiting = require("express-rate-limit");
@@ -36,11 +36,7 @@ app.use(
 );
 
 // Cors Policy
-app.use(
-  cors({
-    origin: "http://localhost:5173",
-  })
-);
+app.use(cors({}));
 
 // Routes
 app.use("/api/auth", require("./routes/authRoute"));
@@ -51,7 +47,7 @@ app.use("/api/categories", require("./routes/categoriesRoute"));
 app.use("/api/password", require("./routes/passwordRoute"));
 
 // Not Found Middleware
-app.use(notFound);
+// app.use(notFound);
 
 // Error Handler Middleware
 app.use(errorHandler);
