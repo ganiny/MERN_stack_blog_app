@@ -4,12 +4,12 @@ import PostList from "../components/PostList";
 import Sidebar from "../components/Sidebar";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchPosts } from "../redux/apiCalls/postsApiCalls";
+import { fetchAllPosts } from "../redux/apiCalls/postsApiCalls";
 
 function HomePage() {
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(fetchPosts(1));
+    dispatch(fetchAllPosts());
     window.scrollTo(0, 0);
   }, []);
 
