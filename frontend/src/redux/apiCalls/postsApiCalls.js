@@ -7,6 +7,7 @@ export function fetchAllPosts() {
   return async (dispatch) => {
     try {
       const { data } = await request.get(`/api/posts`);
+      if(!data)return;
 
       dispatch(postsActions.setPosts(data));
     } catch (error) {
